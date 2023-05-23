@@ -7,3 +7,12 @@ In this example I don't use the Diagonal movement, so I had to change the scores
 
 You can place walls with Left mouse button and remove with the Right button
 Use the arrows to move and space to generate a new path
+
+
+How to use:
+
+mkdir build
+cd build
+cmake ..
+make
+./a_star_raylib
