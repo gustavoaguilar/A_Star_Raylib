@@ -7,8 +7,8 @@
 
 #define WINDOW_TITLE "A* - raylib"
 
-typedef struct t_A_Start_Node{
-    struct t_A_Start_Node* parent;
+typedef struct t_A_Star_Node{
+    struct t_A_Star_Node* parent;
 
     float x;
     float y;
@@ -16,12 +16,12 @@ typedef struct t_A_Start_Node{
     int g;
     int h;
     int f;
-}t_A_Start_Node;
+}t_A_Star_Node;
 
 int map[25][14] = {0};
 
-t_A_Start_Node* astar_create_node(float x, float y, int g, int h){
-    t_A_Start_Node* node = (t_A_Start_Node*) malloc(sizeof(t_A_Start_Node));
+t_A_Star_Node* astar_create_node(float x, float y, int g, int h){
+    t_A_Star_Node* node = (t_A_Star_Node*) malloc(sizeof(t_A_Star_Node));
     
     if(node == NULL){
         return NULL;
@@ -39,7 +39,7 @@ t_A_Start_Node* astar_create_node(float x, float y, int g, int h){
 int astar_check_if_in_list(t_List* list, float x, float y){
     for(int i = 0; i < list->size; i++){
 
-        t_A_Start_Node* temp_node = (t_A_Start_Node*) list_get(list, i);
+        t_A_Star_Node* temp_node = (t_A_Star_Node*) list_get(list, i);
         if(temp_node == NULL){
             return 0;
         }
@@ -75,8 +75,8 @@ t_List* astar(Vector2 start, Vector2 target){
     double run_time = GetTime();
 
     // Create the start and end nodes
-    t_A_Start_Node* start_node = astar_create_node(start.x, start.y, 0, 0);
-    t_A_Start_Node* target_node = astar_create_node(target.x, target.y, 0, 0);
+    t_A_Star_Node* start_node = astar_create_node(start.x, start.y, 0, 0);
+    t_A_Star_Node* target_node = astar_create_node(target.x, target.y, 0, 0);
 
     // Add the start node to the open list
     list_push(open_list, start_node);
@@ -89,7 +89,7 @@ t_List* astar(Vector2 start, Vector2 target){
         int min_score = __INT_MAX__;
 
         for(int i = 0; i < open_list->size; i++){
-            t_A_Start_Node* temp_node = (t_A_Start_Node*) list_get(open_list, i);
+            t_A_Star_Node* temp_node = (t_A_Star_Node*) list_get(open_list, i);
 
             if(temp_node->f <= min_score){
                 min_score = temp_node->f;
@@ -98,7 +98,7 @@ t_List* astar(Vector2 start, Vector2 target){
         }
 
         //Node to be analised
-        t_A_Start_Node* current_node = (t_A_Start_Node*) list_get(open_list, index);
+        t_A_Star_Node* current_node = (t_A_Star_Node*) list_get(open_list, index);
         // Remove from open and push to closed, so we don't analyze this node again
         list_remove(open_list, current_node);
         list_push(closed_list, current_node);
@@ -110,16 +110,16 @@ t_List* astar(Vector2 start, Vector2 target){
             list_push(closed_list, target_node);
             
             // Iterate the list, going from the nodes parents until we find the start node
-            t_A_Start_Node* node;
+            t_A_Star_Node* node;
             node = target_node;
             for(int i = 0; i < closed_list->size; i++){
                 
                 // find the next parent node
                 int next_index = list_find(closed_list, node->parent);
-                node = (t_A_Start_Node*) list_get(closed_list, next_index);
+                node = (t_A_Star_Node*) list_get(closed_list, next_index);
 
                 // Add the node to the path
-                t_A_Start_Node* path_node = astar_create_node(node->x, node->y, node->g, node->h);
+                t_A_Star_Node* path_node = astar_create_node(node->x, node->y, node->g, node->h);
                 list_push(path_list, path_node);
 
                 // if the distance to the start node is zero, we finalized our path
@@ -143,7 +143,7 @@ t_List* astar(Vector2 start, Vector2 target){
             // check if this node is already analyzed of if its a wall
             if(!astar_check_if_in_list(closed_list, next_position[i].x, next_position[i].y) && !check_if_wall(next_position[i].x, next_position[i].y)){
                 // Create the node
-                t_A_Start_Node* child = astar_create_node(next_position[i].x, next_position[i].y, 0, 0);
+                t_A_Star_Node* child = astar_create_node(next_position[i].x, next_position[i].y, 0, 0);
                 child->g = astar_distance_between(child->x, child->y, start.x, start.y);
                 child->h = astar_distance_between(child->x, child->y, target.x, target.y);
                 child->f = 8*child->g + 10*child->h;
@@ -152,7 +152,7 @@ t_List* astar(Vector2 start, Vector2 target){
                 int index = astar_check_if_in_list(open_list, child->x, child->y);
                 if(index > 0){
                     // if yes, update it's score and remove the created child (because they are in the same position)
-                    t_A_Start_Node* old_node = (t_A_Start_Node*) list_get(open_list, index);
+                    t_A_Star_Node* old_node = (t_A_Star_Node*) list_get(open_list, index);
                     if(old_node != NULL){
                         if(child->g <= old_node->g){
                             old_node->g = child->g;
@@ -228,7 +228,7 @@ int main(void){
 
             if(path_list != NULL){
                 for(int i = 0; i < path_list->size; i++){
-                    t_A_Start_Node* node = (t_A_Start_Node*) list_get(path_list, i);
+                    t_A_Star_Node* node = (t_A_Star_Node*) list_get(path_list, i);
                     DrawRectangle(node->x*32, node->y*32, TILE_SIZE, TILE_SIZE, YELLOW);
                 }
             }

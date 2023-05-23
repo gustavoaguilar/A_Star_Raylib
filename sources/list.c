@@ -1,24 +1,5 @@
 #include "list.h"
 
-
-extern int nodes_created;
-extern int a_start_created;
-extern int lists_created;
-extern int nodes_removed;
-extern int a_start_removed;
-extern int lists_removed;
-typedef struct t_A_Start_Node{
-    struct t_A_Start_Node* parent;
-
-    float x;
-    float y;
-
-    int g;
-    int h;
-    int f;
-}t_A_Start_Node;
-
-
 t_Node* node_create(void* data){
     t_Node* temp_node = (t_Node*) malloc(sizeof(t_Node));
     
