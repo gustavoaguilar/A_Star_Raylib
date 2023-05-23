@@ -12,7 +12,11 @@ Use the arrows to move and space to generate a new path
 How to use:
 
 mkdir build
+
 cd build
+
 cmake ..
+
 make
+
 ./a_star_raylib
